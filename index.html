@@ -730,7 +730,8 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
       g.fillStyle = 'rgba(110,70,40,.55)'; for (let p = 40; p < 320; p += 80) { g.fillRect(p, 0, 2, 320); g.fillRect(0, p, 320, 2); } }
     if (kind === 'twill') { g.strokeStyle = accent; g.lineWidth = 2; for (let i = -320; i < 640; i += 6) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 320, 320); g.stroke(); } }
     if (kind === 'shark') { for (let y = 0; y < 320; y += 4) for (let x = 0; x < 320; x += 4) if ((x / 4 + y / 4) % 2) { g.fillStyle = accent; g.fillRect(x, y, 2, 4); } }
-    if (kind === 'linen') { for (let i = 0; i < 260; i++) { g.fillStyle = Math.random() > .5 ? 'rgba(240,230,205,.5)' : 'rgba(140,122,90,.4)'; g.fillRect(Math.random() * 320, Math.random() * 320, 14 + Math.random() * 80, 1 + Math.random() * 1.4); } }
+    if (kind === 'linen') { for (let i = 0; i < 420; i++) { g.fillStyle = Math.random() > .5 ? 'rgba(255,250,235,.22)' : 'rgba(120,104,76,.18)'; g.fillRect(Math.random() * 320, Math.random() * 320, 6 + Math.random() * 34, .8 + Math.random() * .8); }
+      for (let i = 0; i < 160; i++) { g.fillStyle = 'rgba(120,104,76,.14)'; g.fillRect(Math.random() * 320, Math.random() * 320, .8, 6 + Math.random() * 26); } }
     if (kind === 'hopsack') { g.fillStyle = accent; for (let y = 0; y < 320; y += 6) for (let x = 0; x < 320; x += 6) if ((x / 6 + y / 6) % 2) g.fillRect(x, y, 5, 5); }
     if (kind === 'paisley') { g.fillStyle = accent; for (let y = 0; y < 320; y += 40) for (let x = 0; x < 320; x += 40) { const ox = (y / 40) % 2 ? 20 : 0; g.beginPath(); g.ellipse(x + ox, y, 9, 13, .6, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(x + ox + 8, y - 10, 3, 0, Math.PI * 2); g.fill(); } }
     if (kind === 'bengal') { g.fillStyle = accent; for (let x = 0; x < 320; x += 20) g.fillRect(x, 0, 10, 320); }
@@ -862,14 +863,16 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     try {
       const [photo, mask, fab] = await Promise.all([loadImg(base.photo), loadImg(base.mask), loadImg(fabricSrc)]);
       if (token !== paintToken) return;
-      const W = photo.naturalWidth, H = photo.naturalHeight;
+      // Drawn at 2x so the cloth stays crisp even though the photos are small
+      const W = photo.naturalWidth * 2, H = photo.naturalHeight * 2;
       const off = document.createElement('canvas'); off.width = W; off.height = H; const o = off.getContext('2d');
-      const pat = o.createPattern(fab, 'repeat'); pat.setTransform(new DOMMatrix().scale(base.scale));
+      o.imageSmoothingQuality = 'high';
+      const pat = o.createPattern(fab, 'repeat'); pat.setTransform(new DOMMatrix().scale(base.scale * 2));
       o.fillStyle = pat; o.fillRect(0, 0, W, H);
       o.globalCompositeOperation = 'multiply'; o.drawImage(mask, 0, 0, W, H);
       o.globalCompositeOperation = 'destination-in'; o.drawImage(mask, 0, 0, W, H);
-      cv.width = W; cv.height = H; const g = cv.getContext('2d');
-      g.drawImage(photo, 0, 0); g.drawImage(off, 0, 0);
+      cv.width = W; cv.height = H; const g = cv.getContext('2d'); g.imageSmoothingQuality = 'high';
+      g.drawImage(photo, 0, 0, W, H); g.drawImage(off, 0, 0);
       $('#pvBase').src = base.photo;
       requestAnimationFrame(() => cv.classList.remove('fade'));
     } catch (e) { cv.classList.remove('fade'); }
