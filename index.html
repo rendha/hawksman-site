@@ -204,31 +204,6 @@ section { position: relative; padding-block: 130px; }
 .pv-photo .note { position: absolute; left: 14px; top: 14px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; background: rgba(10,44,34,.75); padding: 8px 12px; color: var(--on-green); }
 .pv-swatch { position: absolute; right: 18px; bottom: 18px; width: 22%; aspect-ratio: 1; border-radius: 50%; border: 6px solid var(--white); box-shadow: 0 20px 40px rgba(0,0,0,.35); background-size: 220px; transition: background-image .4s; }
 .pv-swatch::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 55%), radial-gradient(circle at 70% 80%, rgba(0,0,0,.3), transparent 60%); }
-.ai-btn { width: 100%; margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px 20px; cursor: pointer;
-  background: linear-gradient(110deg, var(--wax) 0%, #efe4c6 45%, var(--wax) 60%) 0 0 / 250% 100%; color: var(--green-deep); border: 0;
-  font: 500 12px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; animation: sheen 4s ease-in-out infinite; }
-.ai-btn small { font-size: 9px; letter-spacing: .2em; opacity: .7; border-left: 1px solid rgba(10,44,34,.3); padding-left: 12px; }
-.ai-btn .spark { font-size: 16px; letter-spacing: 0; }
-.ai-btn:hover { filter: brightness(1.05); }
-@keyframes sheen { 0%, 100% { background-position: 100% 0; } 50% { background-position: 0 0; } }
-.ai-modal { position: fixed; inset: 0; z-index: 80; background: rgba(6,24,18,.82); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center;
-  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
-.ai-card { background: var(--paper); color: var(--ink); width: min(560px, 100%); max-height: 100%; overflow: auto; padding: 22px; position: relative; animation: rise .6s var(--ease); }
-.ai-card header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.ai-card h4 { font-size: 28px; }
-.ai-x { background: none; border: 0; font-size: 30px; line-height: 1; cursor: pointer; color: var(--ink); padding: 4px 8px; }
-.ai-stage { position: relative; aspect-ratio: 4 / 5; max-width: 100%; background: var(--paper-2); overflow: hidden; display: grid; place-items: center; }
-.ai-stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; animation: fadeIn .8s var(--ease) both; }
-.ai-loading { display: grid; justify-items: center; gap: 10px; text-align: center; }
-.ai-loading .seal { animation: pulseSeal 1.6s ease-in-out infinite; }
-.ai-loading p { font-family: var(--serif); font-size: 22px; }
-.ai-loading small { color: var(--muted); font-size: 12px; letter-spacing: .1em; }
-@keyframes fadeIn { from { opacity: 0; transform: scale(1.03); } to { opacity: 1; transform: none; } }
-@keyframes pulseSeal { 50% { transform: scale(.9) rotate(-6deg); } }
-.ai-error { padding: 24px; text-align: center; color: var(--ink); max-width: 36ch; }
-.ai-note { font-size: 12px; color: var(--muted); margin-top: 12px; }
-.ai-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
-.ai-acts .btn { flex: 1; padding: 15px 16px; }
 .summary { margin-top: 26px; background: var(--paper); color: var(--ink); padding: 26px 28px; position: relative; }
 .summary::before { content: ""; position: absolute; inset: 6px; border: 1px solid var(--line); pointer-events: none; }
 .summary header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 8px; }
@@ -534,7 +509,6 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
               </div>
               <div class="pv-swatch" id="pvSwatch" title="Your cloth"></div>
             </div>
-            <button class="ai-btn" type="button" id="aiBtn" hidden><span class="spark" aria-hidden="true">✦</span> See it made <small>AI preview</small></button>
             <div class="summary">
               <header><h4>Your commission</h4><span id="sumGarment">Two-piece suit</span></header>
               <dl id="sumList"></dl>
@@ -703,19 +677,6 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     <div class="fine"><span>© 2026 Hawksman Bespoke · Kozhikode</span><span>Masterfully crafted since 2019</span></div>
   </div>
 </footer>
-
-<div class="ai-modal" id="aiModal" hidden role="dialog" aria-modal="true" aria-labelledby="aiTitle">
-  <div class="ai-card">
-    <header><h4 id="aiTitle">Your design, made</h4><button type="button" class="ai-x" id="aiClose" aria-label="Close preview">×</button></header>
-    <div class="ai-stage">
-      <img id="aiImg" alt="AI preview of your design" hidden>
-      <div class="ai-loading" id="aiLoading"><div class="seal" style="--s:72px"><span>H</span></div><p>Tailoring your preview…</p><small>Usually 5 to 15 seconds</small></div>
-      <p class="ai-error" id="aiError" hidden></p>
-    </div>
-    <p class="ai-note">AI preview of your design. The finished garment may differ slightly; your tailor confirms every detail at the fitting.</p>
-    <div class="ai-acts"><button class="btn line" type="button" id="aiAgain">Show another</button><a class="btn" href="#visit" id="aiBook">Book with this design</a></div>
-  </div>
-</div>
 
 <a class="wa" href="https://wa.me/918138919157" target="_blank" rel="noopener" aria-label="Message Hawksman on WhatsApp">
   <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.6 1.1 2.7c.1.2 1.9 2.9 4.6 4 1.7.7 2.4.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>
@@ -893,7 +854,7 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
   const BASE_FOR = { two: 'suit', three: 'jacket', tux: 'jacket', blazer: 'jacket', trousers: 'trousers', shirt: 'shirt' };
   const imgCache = {};
   const loadImg = src => imgCache[src] || (imgCache[src] = new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = src; }));
-  let paintToken = 0, lastPaint = '';
+  let paintToken = 0, lastPaint = '', lastFabricId = '';
   async function paintPreview(baseKey, fabricSrc) {
     const key = baseKey + fabricSrc.length + fabricSrc.slice(-40);
     if (key === lastPaint) return; lastPaint = key;
@@ -939,7 +900,8 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     $('#pvFacing').style.backgroundImage = `url(${fabric.img})`;
     $('#pvLin').style.backgroundImage = `url(${findIn(LININGS, D.lining).img})`;
     const pm = $('#pvMono'); pm.textContent = D.mono || ''; pm.style.color = { gold: '#d9b86a', ivory: '#f3ead2', green: '#0e3b2e', navy: '#1b2440' }[D.thread];
-    if (hasGsap && !reduce) gsap.fromTo('#pvSwatch', { scale: .9, rotate: -8 }, { scale: 1, rotate: 0, duration: .9, ease: 'expo.out' });
+    // The preview only moves when the cloth itself changes; style choices leave the photo as it is
+    if (fabric.id !== lastFabricId) { if (lastFabricId && hasGsap && !reduce) gsap.fromTo('#pvSwatch', { scale: .9, rotate: -8 }, { scale: 1, rotate: 0, duration: .9, ease: 'expo.out' }); lastFabricId = fabric.id; }
     // summary
     $('#sumGarment').textContent = GARMENTS[D.garment].label;
     $('#sumList').innerHTML = summaryRows().map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
@@ -956,64 +918,6 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     try { navigator.clipboard.writeText(txt).then(() => st.textContent = 'Copied. Paste it into WhatsApp or an email to us.', fallback); } catch (e) { fallback(); }
   });
   $('#bookDesign').addEventListener('click', () => { $('#b-incdesign').checked = true; });
-
-  /* ---------------- "See it made": AI preview (Cloudflare Worker) ---------------- */
-  // Paste the Cloudflare Worker address between the quotes to switch the button on (see README.md).
-  const AI_PREVIEW_URL = '';
-  const AI_DAILY_LIMIT = 8; // per visitor, per day
-  const aiBtn = $('#aiBtn'), aiModal = $('#aiModal'), aiImg = $('#aiImg'), aiLoading = $('#aiLoading'), aiError = $('#aiError');
-  aiBtn.hidden = !AI_PREVIEW_URL;
-  const aiCount = () => { const s = store.get('hawksman-ai') || {}; return s.day === new Date().toDateString() ? s.n : 0; };
-  const aiBump = () => store.set('hawksman-ai', { day: new Date().toDateString(), n: aiCount() + 1 });
-  const toBlob = (canvas, w, h, type = 'image/jpeg') => new Promise(ok => { const c = document.createElement('canvas'); c.width = w; c.height = h;
-    c.getContext('2d').drawImage(canvas, 0, 0, w, h); c.toBlob(ok, type, .9); });
-
-  function aiPrompt() {
-    const isShirt = D.garment === 'shirt', base = BASE_FOR[D.garment];
-    const fabric = isShirt ? findIn(SHIRTINGS, D.shirting) : findIn(CLOTHS, D.cloth);
-    const what = { suit: 'suit', jacket: 'jacket on the tailor\'s dress form', trousers: 'trousers', shirt: 'shirt' }[base];
-    const details = summaryRows().filter(([k]) => !['Cloth', 'Shirting', 'Monogram'].includes(k)).map(([k, v]) => `${k.toLowerCase()}: ${v}`).join('; ');
-    const extra = D.garment === 'tux' ? ' It is a black-tie dinner jacket with satin-faced lapels.' : D.garment === 'three' ? ' Add a matching waistcoat.' : '';
-    return `Professional menswear catalogue photograph, photorealistic. Keep the same person, pose, framing, lighting and background as image 0. ` +
-      `Re-tailor the ${what} into a bespoke ${GARMENTS[D.garment].label.toLowerCase()} made entirely from the fabric in image 1 (${fabric.name}), ` +
-      `matching its colour, weave and pattern exactly, at a realistic scale.${extra} Tailoring details: ${details}. ` +
-      `Crisp hand-finished tailoring, natural drape, sharp fabric texture, high detail. No text, no logos, no watermark.`;
-  }
-
-  let aiBusy = false;
-  async function seeItMade(newSeed) {
-    if (aiBusy) return;
-    aiModal.hidden = false; document.body.style.overflow = 'hidden';
-    aiImg.hidden = true; aiError.hidden = true; aiLoading.hidden = false;
-    if (aiCount() >= AI_DAILY_LIMIT) { aiLoading.hidden = true; aiError.hidden = false; aiError.textContent = 'You have seen today\'s AI previews. Your design is saved, so come back tomorrow or book a fitting to see the cloth in person.'; return; }
-    aiBusy = true;
-    try {
-      const isShirt = D.garment === 'shirt', fabric = isShirt ? findIn(SHIRTINGS, D.shirting) : findIn(CLOTHS, D.cloth);
-      const fab = await loadImg(fabric.img);
-      const form = new FormData();
-      form.append('prompt', aiPrompt());
-      form.append('input_image_0', await toBlob($('#pvCanvas'), 408, 510), 'preview.jpg');
-      form.append('input_image_1', await toBlob(fab, 320, 320), 'fabric.jpg');
-      if (newSeed) form.append('seed', String(Math.floor(Math.random() * 1e9)));
-      const res = await fetch(AI_PREVIEW_URL, { method: 'POST', body: form });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.image) throw new Error(data.error === 'limit' ? 'limit' : 'failed');
-      aiBump();
-      aiImg.src = 'data:image/jpeg;base64,' + data.image; aiImg.hidden = false;
-    } catch (e) {
-      aiError.hidden = false;
-      aiError.textContent = e.message === 'limit'
-        ? 'Our free AI previews are used up for today. They reset every day; meanwhile the cloth preview above shows your choices.'
-        : 'The preview could not be made just now. Please try again in a moment.';
-    } finally { aiBusy = false; aiLoading.hidden = true; }
-  }
-  const closeAi = () => { aiModal.hidden = true; document.body.style.overflow = ''; };
-  aiBtn.addEventListener('click', () => seeItMade(false));
-  $('#aiAgain').addEventListener('click', () => seeItMade(true));
-  $('#aiClose').addEventListener('click', closeAi);
-  aiModal.addEventListener('click', e => { if (e.target === aiModal) closeAi(); });
-  addEventListener('keydown', e => { if (e.key === 'Escape' && !aiModal.hidden) closeAi(); });
-  $('#aiBook').addEventListener('click', () => { $('#b-incdesign').checked = true; closeAi(); });
 
   /* Tabs */
   function showTab(which) {
