@@ -199,9 +199,9 @@ section { position: relative; padding-block: 130px; }
 .summary header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 8px; }
 .summary header h4 { font-size: 26px; }
 .summary header span { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
-.summary dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0 18px; font-size: 14px; }
-.summary dt { color: var(--muted); padding-block: 6px; border-bottom: 1px dotted var(--line); }
-.summary dd { margin: 0; text-align: right; padding-block: 6px; border-bottom: 1px dotted var(--line); }
+.summary dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0; font-size: 14px; }
+.summary dt { color: var(--muted); padding: 7px 18px 7px 0; border-bottom: 1px dotted var(--line); }
+.summary dd { margin: 0; text-align: right; padding-block: 7px; border-bottom: 1px dotted var(--line); }
 .summary .acts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; position: relative; }
 .summary .btn { padding: 15px 20px; }
 .summary .status { font-size: 13px; color: var(--green); margin-top: 10px; min-height: 1.4em; }
@@ -366,6 +366,8 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
   background: var(--green); color: var(--on-green); text-decoration: none; border-radius: 999px; padding: 12px 18px 12px 14px; font: 500 11px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase;
   box-shadow: 0 14px 30px -10px rgba(10,44,34,.6); transition: transform .5s var(--ease); }
 .wa:hover { transform: translateY(-3px); }
+.wa.away { opacity: 0; pointer-events: none; transform: translateY(20px); }
+.wa { transition: transform .5s var(--ease), opacity .4s; }
 .wa svg { width: 22px; height: 22px; }
 @media (max-width: 520px) { .wa span { display: none; } .wa { padding: 14px; } }
 
@@ -612,6 +614,12 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
         <div class="fld"><label for="b-phone">Phone or email</label><input id="b-phone" name="contact" placeholder="So we can confirm"></div>
         <div class="fld"><label for="b-date">Preferred date</label><input id="b-date" name="date" type="date"></div>
         <div class="fld"><label for="b-time">Time</label><select id="b-time" name="time"><option>Morning</option><option selected>Afternoon</option><option>Evening</option></select></div>
+        <div class="fld full"><label>Attach from the Fitting Room</label>
+          <div class="choice">
+            <input type="checkbox" id="b-incdesign"><label for="b-incdesign" id="incDesignLbl">My design</label>
+            <input type="checkbox" id="b-incfit"><label for="b-incfit">My fit profile</label>
+          </div>
+        </div>
         <div class="fld full"><label for="b-notes">Notes</label><textarea id="b-notes" name="notes" placeholder="The occasion, a date to be ready by, or your design from the Fitting Room"></textarea></div>
         <div class="hp" aria-hidden="true"><label for="b-website">Leave this empty</label><input id="b-website" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="form-foot">
@@ -646,7 +654,7 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
       <div class="script">Bespoke beyond tailoring</div>
     </div>
     <div class="foot-cols">
-      <div><h4>Collections</h4><ul><li><a href="#collections">Suits</a></li><li><a href="#collections">Evening</a></li><li><a href="#collections">Jackets</a></li><li><a href="#collections">Wedding</a></li></ul></div>
+      <div><h4>Collections</h4><ul><li><a href="#collections">Suits</a></li><li><a href="#collections">Evening</a></li><li><a href="#collections">Jackets</a></li><li><a href="#collections">Wedding</a></li><li><a href="#fitting" data-garment="shirt">Shirts</a></li><li><a href="#fitting" data-garment="trousers">Trousers</a></li></ul></div>
       <div><h4>Fitting Room</h4><ul><li><a href="#fitting">Design your suit</a></li><li><a href="#fitting" data-tab="size">Find your size</a></li><li><a href="#visit">Book appointment</a></li></ul></div>
       <div><h4>Atelier</h4><ul><li>Metro Jazz, Cherooty Rd</li><li>Kozhikode 673032</li><li>+91 81389 19157</li></ul></div>
       <div><h4>Follow</h4><ul><li><a href="https://www.instagram.com/hawksmanbespoke/" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://wa.me/918138919157" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="https://maps.app.goo.gl/wVSAhnpGZPQqGZVk9" target="_blank" rel="noopener">Google Maps</a></li></ul></div>
@@ -710,12 +718,14 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     if (kind === 'linen') { for (let i = 0; i < 260; i++) { g.fillStyle = Math.random() > .5 ? 'rgba(240,230,205,.5)' : 'rgba(140,122,90,.4)'; g.fillRect(Math.random() * 320, Math.random() * 320, 14 + Math.random() * 80, 1 + Math.random() * 1.4); } }
     if (kind === 'hopsack') { g.fillStyle = accent; for (let y = 0; y < 320; y += 6) for (let x = 0; x < 320; x += 6) if ((x / 6 + y / 6) % 2) g.fillRect(x, y, 5, 5); }
     if (kind === 'paisley') { g.fillStyle = accent; for (let y = 0; y < 320; y += 40) for (let x = 0; x < 320; x += 40) { const ox = (y / 40) % 2 ? 20 : 0; g.beginPath(); g.ellipse(x + ox, y, 9, 13, .6, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(x + ox + 8, y - 10, 3, 0, Math.PI * 2); g.fill(); } }
+    if (kind === 'bengal') { g.fillStyle = accent; for (let x = 0; x < 320; x += 20) g.fillRect(x, 0, 10, 320); }
+    if (kind === 'gingham') { g.fillStyle = accent; for (let p = 0; p < 320; p += 20) { g.fillRect(p, 0, 10, 320); g.fillRect(0, p, 320, 10); } }
     if (kind === 'satin') { const gr = g.createLinearGradient(0, 0, 320, 320); gr.addColorStop(0, 'rgba(255,255,255,.25)'); gr.addColorStop(.5, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(0,0,0,.15)'); g.fillStyle = gr; g.fillRect(0, 0, 320, 320); }
     noise(g, 320, 320, kind === 'satin' ? 3 : 9);
     return c.toDataURL('image/jpeg', .86);
   }
 
-  /* ---------------- Fitting Room: suit designer ---------------- */
+  /* ---------------- Fitting Room: designer ---------------- */
   const CLOTHS = [
     { id: 'navy-stripe', name: 'Navy chalk stripe', note: 'Super 120s wool · 280 g/m · year-round', img: cloth('stripe', '#1c2640', 'rgba(210,218,235,.6)') },
     { id: 'tan-glen', name: 'Tan glen check', note: 'Wool · 290 g/m · day wear', img: cloth('glen', '#b0895a', 'rgba(130,95,58,.45)') },
@@ -726,35 +736,69 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     { id: 'stone-linen', name: 'Stone linen', note: 'Irish linen · 300 g/m · Kerala summer', img: cloth('linen', '#c9b896', '') },
     { id: 'navy-hopsack', name: 'Navy hopsack', note: 'Wool · 280 g/m · breathable blazer cloth', img: cloth('hopsack', '#1d2a44', 'rgba(50,64,96,.75)') }
   ];
-  const LININGS = [
-    { id: 'green', name: 'Bottle green', img: cloth('satin', '#14533f'), ink: '#d9ccaa' },
-    { id: 'burgundy', name: 'Burgundy', img: cloth('satin', '#6b1f2a'), ink: '#e8d8b0' },
-    { id: 'champagne', name: 'Champagne', img: cloth('satin', '#d9ccaa'), ink: '#0e3b2e' },
-    { id: 'navy', name: 'Navy', img: cloth('satin', '#1b2440'), ink: '#d9ccaa' },
-    { id: 'paisley', name: 'Paisley', img: cloth('paisley', '#3a1e2a', 'rgba(217,204,170,.6)'), ink: '#f0e6c8' }
+  const SHIRTINGS = [
+    { id: 'white-poplin', name: 'White poplin', note: 'Two-fold cotton poplin · crisp and smooth · every day', img: cloth('shark', '#f3f3f0', 'rgba(195,200,206,.28)') },
+    { id: 'sky-oxford', name: 'Sky blue oxford', note: 'Cotton oxford · soft basket weave · casual and office', img: cloth('hopsack', '#b9d0e8', 'rgba(255,255,255,.45)') },
+    { id: 'pink-endon', name: 'Pink end-on-end', note: 'Two-fold cotton · fine two-tone weave', img: cloth('shark', '#ecd0d3', 'rgba(255,255,255,.55)') },
+    { id: 'blue-bengal', name: 'Blue Bengal stripe', note: 'Cotton poplin · bold regular stripe', img: cloth('bengal', '#f4f6f9', '#7192c2') },
+    { id: 'white-twill', name: 'White twill', note: 'Cotton twill · soft sheen · formal and evening', img: cloth('twill', '#f2f1ec', 'rgba(195,193,185,.5)') },
+    { id: 'lavender-fil', name: 'Lavender fil-a-fil', note: 'Two-fold cotton · subtle texture', img: cloth('shark', '#d7d1e9', 'rgba(255,255,255,.5)') },
+    { id: 'white-linen', name: 'White linen', note: 'Pure linen · cool for Kerala summer', img: cloth('linen', '#ecebe4', '') },
+    { id: 'navy-gingham', name: 'Navy gingham', note: 'Cotton · small check · weekend wear', img: cloth('gingham', '#f4f6f9', 'rgba(40,60,110,.32)') }
   ];
-  const GARMENTS = { two: { label: 'Two-piece suit', img: 'img/check-chair.jpg' }, three: { label: 'Three-piece suit', img: 'img/navy-db.jpg' }, tux: { label: 'Tuxedo', img: 'img/tuxedo.jpg' }, blazer: { label: 'Jacket / blazer', img: 'img/jacket-form.jpg' } };
+  const LININGS = [
+    { id: 'green', name: 'Bottle green', img: cloth('satin', '#14533f') },
+    { id: 'burgundy', name: 'Burgundy', img: cloth('satin', '#6b1f2a') },
+    { id: 'champagne', name: 'Champagne', img: cloth('satin', '#d9ccaa') },
+    { id: 'navy', name: 'Navy', img: cloth('satin', '#1b2440') },
+    { id: 'paisley', name: 'Paisley', img: cloth('paisley', '#3a1e2a', 'rgba(217,204,170,.6)') }
+  ];
+  const GARMENTS = {
+    two: { label: 'Two-piece suit', img: 'img/check-chair.jpg' }, three: { label: 'Three-piece suit', img: 'img/navy-db.jpg' },
+    tux: { label: 'Tuxedo', img: 'img/tuxedo.jpg' }, blazer: { label: 'Jacket / blazer', img: 'img/jacket-form.jpg' },
+    shirt: { label: 'Shirt', img: 'img/check-sofa.jpg' }, trousers: { label: 'Trousers', img: 'img/check-chair.jpg' }
+  };
+  const JACKET = ['two', 'three', 'tux', 'blazer'], TROUSERS = ['two', 'three', 'tux', 'trousers'], SHIRT = ['shirt'];
   const STEPS = [
     { key: 'garment', title: 'Garment', type: 'opts', options: Object.entries(GARMENTS).map(([v, g]) => [v, g.label]) },
-    { key: 'cloth', title: 'Cloth', type: 'cloth' },
-    { key: 'fasten', title: 'Fastening', type: 'opts', options: [['sb1', 'Single-breasted, 1 button'], ['sb2', 'Single-breasted, 2 buttons'], ['db', 'Double-breasted, 6 × 2']] },
-    { key: 'lapel', title: 'Lapel', type: 'opts', options: [['notch', 'Notch'], ['peak', 'Peak'], ['shawl', 'Shawl']] },
-    { key: 'pockets', title: 'Pockets', type: 'opts', options: [['flap', 'Flap'], ['jetted', 'Jetted'], ['patch', 'Patch'], ['flap-ticket', 'Flap + ticket pocket']] },
-    { key: 'vents', title: 'Vents', type: 'opts', options: [['side', 'Side vents'], ['centre', 'Centre vent'], ['none', 'No vent']] },
-    { key: 'buttons', title: 'Buttons', type: 'opts', options: [['horn', 'Horn'], ['corozo', 'Corozo'], ['pearl', 'Mother-of-pearl'], ['gilt', 'Gilt metal'], ['satin', 'Satin-covered']] },
-    { key: 'waistcoat', title: 'Waistcoat', type: 'opts', only: ['three'], options: [['sb', 'Single-breasted, 5 button'], ['db', 'Double-breasted'], ['lapelled', 'With lapels']] },
-    { key: 'trousers', title: 'Trousers', type: 'opts', not: ['blazer'], options: [['flat', 'Flat front'], ['pleat1', 'Single pleat'], ['pleat2', 'Double pleat']] },
-    { key: 'waist', title: 'Trouser waist', type: 'opts', not: ['blazer'], options: [['adjusters', 'Side adjusters'], ['loops', 'Belt loops'], ['braces', 'Brace buttons']] },
-    { key: 'hem', title: 'Trouser hem', type: 'opts', not: ['blazer'], options: [['plain', 'Plain hem'], ['turnup', 'Turn-ups']] },
-    { key: 'lining', title: 'Lining', type: 'lining' },
-    { key: 'mono', title: 'Monogram', type: 'mono' }
+    { key: 'cloth', title: 'Cloth', type: 'cloth', list: CLOTHS, for: [...JACKET, 'trousers'] },
+    { key: 'shirting', title: 'Shirting', type: 'cloth', list: SHIRTINGS, for: SHIRT },
+    { key: 'fasten', title: 'Fastening', type: 'opts', for: JACKET, options: [['sb1', 'Single-breasted, 1 button'], ['sb2', 'Single-breasted, 2 buttons'], ['db', 'Double-breasted, 6 × 2']] },
+    { key: 'lapel', title: 'Lapel', type: 'opts', for: JACKET, options: [['notch', 'Notch'], ['peak', 'Peak'], ['shawl', 'Shawl']] },
+    { key: 'pockets', title: 'Pockets', type: 'opts', for: JACKET, options: [['flap', 'Flap'], ['jetted', 'Jetted'], ['patch', 'Patch'], ['flap-ticket', 'Flap + ticket pocket']] },
+    { key: 'vents', title: 'Vents', type: 'opts', for: JACKET, options: [['side', 'Side vents'], ['centre', 'Centre vent'], ['none', 'No vent']] },
+    { key: 'buttons', title: 'Buttons', type: 'opts', for: JACKET, options: [['horn', 'Horn'], ['corozo', 'Corozo'], ['pearl', 'Mother-of-pearl'], ['gilt', 'Gilt metal'], ['satin', 'Satin-covered']] },
+    { key: 'waistcoat', title: 'Waistcoat', type: 'opts', for: ['three'], options: [['sb', 'Single-breasted, 5 button'], ['db', 'Double-breasted'], ['lapelled', 'With lapels']] },
+    { key: 'collar', title: 'Collar', type: 'opts', for: SHIRT, options: [['spread', 'Classic spread'], ['cutaway', 'Cutaway'], ['point', 'Point'], ['buttondown', 'Button-down'], ['band', 'Band (mandarin)'], ['wing', 'Wing (evening)']] },
+    { key: 'cuffs', title: 'Cuffs', type: 'opts', for: SHIRT, options: [['single', 'Single button'], ['double-btn', 'Two button'], ['french', 'French (cufflinks)'], ['convertible', 'Convertible']] },
+    { key: 'placket', title: 'Front', type: 'opts', for: SHIRT, options: [['standard', 'Standard placket'], ['hidden', 'Hidden buttons'], ['french-front', 'Clean French front']] },
+    { key: 'spocket', title: 'Chest pocket', type: 'opts', for: SHIRT, options: [['none', 'No pocket'], ['one', 'One pocket'], ['two-flap', 'Two flap pockets']] },
+    { key: 'sback', title: 'Back', type: 'opts', for: SHIRT, options: [['plain', 'Plain'], ['box', 'Box pleat'], ['side', 'Side pleats'], ['darts', 'Darts (closer fit)']] },
+    { key: 'sbuttons', title: 'Shirt buttons', type: 'opts', for: SHIRT, options: [['mop', 'Mother-of-pearl'], ['white', 'White'], ['contrast', 'Contrast thread']] },
+    { key: 'sfit', title: 'Shirt fit', type: 'opts', for: SHIRT, options: [['slim', 'Slim'], ['classic', 'Classic'], ['relaxed', 'Relaxed']] },
+    { key: 'trousers', title: 'Trouser front', type: 'opts', for: TROUSERS, options: [['flat', 'Flat front'], ['pleat1', 'Single pleat'], ['pleat2', 'Double pleat']] },
+    { key: 'waist', title: 'Trouser waist', type: 'opts', for: TROUSERS, options: [['adjusters', 'Side adjusters'], ['loops', 'Belt loops'], ['braces', 'Brace buttons']] },
+    { key: 'tfit', title: 'Trouser leg', type: 'opts', for: TROUSERS, options: [['slim', 'Slim'], ['tapered', 'Tapered'], ['straight', 'Straight'], ['wide', 'Wide']] },
+    { key: 'tback', title: 'Back pockets', type: 'opts', for: TROUSERS, options: [['two', 'Two jetted'], ['one', 'One jetted'], ['none', 'None']] },
+    { key: 'hem', title: 'Trouser hem', type: 'opts', for: TROUSERS, options: [['plain', 'Plain hem'], ['turnup', 'Turn-ups']] },
+    { key: 'lining', title: 'Lining', type: 'lining', for: JACKET },
+    { key: 'mono', title: 'Monogram', type: 'mono', for: [...JACKET, ...SHIRT] }
   ];
-  const DEFAULT = { garment: 'two', cloth: 'tan-glen', fasten: 'sb2', lapel: 'notch', pockets: 'flap', vents: 'side', buttons: 'horn', waistcoat: 'sb', trousers: 'flat', waist: 'adjusters', hem: 'plain', lining: 'green', mono: '', thread: 'gold' };
-  const PRESET = { tux: { cloth: 'midnight', fasten: 'sb1', lapel: 'shawl', pockets: 'jetted', buttons: 'satin', vents: 'none' }, three: { cloth: 'navy-stripe', fasten: 'db', lapel: 'peak' }, blazer: { cloth: 'navy-hopsack', buttons: 'gilt', pockets: 'patch' }, two: { cloth: 'tan-glen', fasten: 'sb2', lapel: 'notch', buttons: 'horn' } };
+  const DEFAULT = { garment: 'two', cloth: 'tan-glen', shirting: 'white-poplin', fasten: 'sb2', lapel: 'notch', pockets: 'flap', vents: 'side', buttons: 'horn', waistcoat: 'sb',
+    collar: 'spread', cuffs: 'single', placket: 'standard', spocket: 'none', sback: 'side', sbuttons: 'mop', sfit: 'classic',
+    trousers: 'flat', waist: 'adjusters', tfit: 'tapered', tback: 'two', hem: 'plain', lining: 'green', mono: '', thread: 'gold' };
+  const PRESET = { tux: { cloth: 'midnight', fasten: 'sb1', lapel: 'shawl', pockets: 'jetted', buttons: 'satin', vents: 'none', hem: 'plain' }, three: { cloth: 'navy-stripe', fasten: 'db', lapel: 'peak' },
+    blazer: { cloth: 'navy-hopsack', buttons: 'gilt', pockets: 'patch' }, two: { cloth: 'tan-glen', fasten: 'sb2', lapel: 'notch', buttons: 'horn' },
+    trousers: { cloth: 'charcoal-herring', trousers: 'pleat1', waist: 'adjusters', hem: 'turnup' }, shirt: { shirting: 'white-poplin', collar: 'spread', cuffs: 'single' } };
   let D = Object.assign({}, DEFAULT, store.get('hawksman-design') || {});
+  if (!GARMENTS[D.garment]) D.garment = 'two';
 
   const form = $('#designer');
-  const labelOf = (key, val) => { const s = STEPS.find(s => s.key === key); const o = s && s.options && s.options.find(o => o[0] === val); return o ? o[1] : val; };
+  const shown = s => !s.for || s.for.includes(D.garment);
+  const optLabel = (s, val) => { const o = s.options && s.options.find(o => o[0] === val); return o ? o[1] : val; };
+  const findIn = (list, id) => list.find(c => c.id === id) || list[0];
+  const valueOf = s => s.type === 'cloth' ? findIn(s.list, D[s.key]).name : s.type === 'lining' ? findIn(LININGS, D.lining).name
+    : s.type === 'mono' ? (D.mono ? `${D.mono} in ${D.thread} thread` : 'None') : s.key === 'garment' ? GARMENTS[D.garment].label : optLabel(s, D[s.key]);
   function buildDesigner() {
     form.innerHTML = '';
     STEPS.forEach(s => {
@@ -766,66 +810,63 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
         wrap.appendChild(box);
       }
       if (s.type === 'cloth' || s.type === 'lining') {
-        const list = s.type === 'cloth' ? CLOTHS : LININGS, box = document.createElement('div'); box.className = 'sw-grid' + (s.type === 'lining' ? ' small' : '');
+        const list = s.type === 'cloth' ? s.list : LININGS, box = document.createElement('div'); box.className = 'sw-grid' + (s.type === 'lining' ? ' small' : '');
         list.forEach(c => { const id = `d-${s.key}-${c.id}`; box.insertAdjacentHTML('beforeend', `<div class="sw"><input type="radio" name="${s.key}" id="${id}" value="${c.id}"><label for="${id}"><span class="chip" style="background-image:url(${c.img})"></span>${c.name}</label></div>`); });
         wrap.appendChild(box);
-        if (s.type === 'cloth') wrap.insertAdjacentHTML('beforeend', '<p class="hint" id="clothNote"></p>');
+        if (s.type === 'cloth') wrap.insertAdjacentHTML('beforeend', `<p class="hint" data-note="${s.key}"></p>`);
       }
       if (s.type === 'mono') {
         wrap.insertAdjacentHTML('beforeend', `<div class="mono"><div class="fld"><label for="d-mono">Initials, up to 3 letters</label><input id="d-mono" name="mono" maxlength="3" autocomplete="off" placeholder="e.g. AKR"></div>
-          <div class="fld"><label for="d-thread">Thread</label><select id="d-thread" name="thread"><option value="gold">Gold</option><option value="ivory">Ivory</option><option value="green">Green</option></select></div></div>
-          <p class="hint">Stitched by hand inside the jacket, on the lining.</p>`);
+          <div class="fld"><label for="d-thread">Thread</label><select id="d-thread" name="thread"><option value="gold">Gold</option><option value="ivory">Ivory</option><option value="green">Green</option><option value="navy">Navy</option></select></div></div>
+          <p class="hint" id="monoHint"></p>`);
       }
       form.appendChild(wrap);
     });
-    form.addEventListener('change', e => { const t = e.target; if (!t.name) return; if (t.name === 'garment') setGarment(t.value); else { D[t.name] = t.value; render(); } });
-    form.addEventListener('input', e => { if (e.target.name === 'mono') { D.mono = e.target.value.toUpperCase().replace(/[^A-Z]/g, ''); e.target.value = D.mono; render(); } });
+    // Any choice in the designer attaches the design to the booking automatically
+    form.addEventListener('change', e => { const t = e.target; if (!t.name) return; $('#b-incdesign').checked = true; if (t.name === 'garment') setGarment(t.value); else { D[t.name] = t.value; render(); } });
+    form.addEventListener('input', e => { if (e.target.name === 'mono') { $('#b-incdesign').checked = true; D.mono = e.target.value.toUpperCase().replace(/[^A-Z]/g, ''); e.target.value = D.mono; render(); } });
   }
-  function setGarment(g) { D = Object.assign({}, D, PRESET[g] || {}, { garment: g }); render(true); }
-  const CL = id => CLOTHS.find(c => c.id === id) || CLOTHS[0], LI = id => LININGS.find(l => l.id === id) || LININGS[0];
+  function setGarment(g) { D = Object.assign({}, D, PRESET[g] || {}, { garment: g }); render(); }
   let showA = true, lastImg = '';
-  function render(photoChange) {
-    // sync inputs
+  function render() {
     $$('#designer input[type=radio]').forEach(i => i.checked = D[i.name] === i.value);
     const mono = $('#d-mono'), thr = $('#d-thread'); if (mono && document.activeElement !== mono) mono.value = D.mono; if (thr) thr.value = D.thread;
     let n = 0;
-    $$('#designer .step').forEach(f => { const s = STEPS.find(s => s.key === f.dataset.key);
-      const hide = (s.only && !s.only.includes(D.garment)) || (s.not && s.not.includes(D.garment)); f.hidden = !!hide;
-      if (!hide) f.querySelector('.n').textContent = String(++n).padStart(2, '0');
-      const cur = f.querySelector('.cur'); cur.textContent = s.key === 'cloth' ? CL(D.cloth).name : s.key === 'lining' ? LI(D.lining).name : s.key === 'mono' ? (D.mono || 'None') : s.key === 'garment' ? GARMENTS[D.garment].label : labelOf(s.key, D[s.key]); });
-    $('#clothNote').textContent = CL(D.cloth).note;
+    $$('#designer .step').forEach(f => { const s = STEPS.find(s => s.key === f.dataset.key), vis = shown(s); f.hidden = !vis;
+      if (vis) f.querySelector('.n').textContent = String(++n).padStart(2, '0');
+      f.querySelector('.cur').textContent = valueOf(s); });
+    $$('#designer [data-note]').forEach(p => { const s = STEPS.find(s => s.key === p.dataset.note); p.textContent = findIn(s.list, D[s.key]).note; });
+    const isShirt = D.garment === 'shirt', hasLining = JACKET.includes(D.garment);
+    $('#monoHint').textContent = isShirt ? 'Stitched on the cuff or the chest. We confirm where at your fitting.' : 'Stitched by hand inside the jacket, on the lining.';
     // preview
     const img = GARMENTS[D.garment].img;
     if (img !== lastImg) { const a = $('#pvImgA'), b = $('#pvImgB'); const inEl = showA ? b : a, outEl = showA ? a : b;
       if (lastImg) { inEl.src = img; inEl.classList.remove('out'); outEl.classList.add('out'); showA = !showA; } else { a.src = img; }
       lastImg = img; }
     $('#pvNote').textContent = GARMENTS[D.garment].label + ' · style reference';
-    $('#pvSwatch').style.backgroundImage = `url(${CL(D.cloth).img})`;
-    const li = LI(D.lining); $('#pvLining').style.backgroundImage = `url(${li.img})`;
-    const pm = $('#pvMono'); pm.textContent = D.mono || ''; pm.style.color = { gold: '#d9b86a', ivory: '#f3ead2', green: '#0e3b2e' }[D.thread];
+    const fabric = isShirt ? findIn(SHIRTINGS, D.shirting) : findIn(CLOTHS, D.cloth);
+    $('#pvSwatch').style.backgroundImage = `url(${fabric.img})`;
+    const lin = $('#pvLining'); lin.hidden = !(hasLining || isShirt);
+    lin.style.backgroundImage = `url(${hasLining ? findIn(LININGS, D.lining).img : fabric.img})`;
+    lin.title = hasLining ? 'Lining and monogram' : 'Monogram';
+    const pm = $('#pvMono'); pm.textContent = D.mono || ''; pm.style.color = { gold: '#d9b86a', ivory: '#f3ead2', green: '#0e3b2e', navy: '#1b2440' }[D.thread];
     if (hasGsap && !reduce) gsap.fromTo('#pvSwatch', { scale: .9, rotate: -8 }, { scale: 1, rotate: 0, duration: .9, ease: 'expo.out' });
     // summary
-    const rows = summaryRows();
     $('#sumGarment').textContent = GARMENTS[D.garment].label;
-    $('#sumList').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+    $('#sumList').innerHTML = summaryRows().map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+    $('#incDesignLbl').textContent = `My design (${GARMENTS[D.garment].label.toLowerCase()})`;
     store.set('hawksman-design', D);
   }
-  function summaryRows() {
-    const r = [['Cloth', CL(D.cloth).name], ['Fastening', labelOf('fasten', D.fasten)], ['Lapel', labelOf('lapel', D.lapel)], ['Pockets', labelOf('pockets', D.pockets)], ['Vents', labelOf('vents', D.vents)], ['Buttons', labelOf('buttons', D.buttons)]];
-    if (D.garment === 'three') r.push(['Waistcoat', labelOf('waistcoat', D.waistcoat)]);
-    if (D.garment !== 'blazer') r.push(['Trousers', `${labelOf('trousers', D.trousers)}, ${labelOf('waist', D.waist).toLowerCase()}, ${labelOf('hem', D.hem).toLowerCase()}`]);
-    r.push(['Lining', LI(D.lining).name]); r.push(['Monogram', D.mono ? `${D.mono} in ${D.thread} thread` : 'None']);
-    return r;
-  }
-  const summaryText = () => `Hawksman design: ${GARMENTS[D.garment].label}\n` + summaryRows().map(([k, v]) => `${k}: ${v}`).join('\n');
+  const summaryRows = () => STEPS.filter(s => s.key !== 'garment' && shown(s)).map(s => [s.title, valueOf(s)]);
+  const summaryText = () => `DESIGN: ${GARMENTS[D.garment].label}\n` + summaryRows().map(([k, v]) => `${k}: ${v}`).join('\n');
   buildDesigner(); render();
 
   $('#copyDesign').addEventListener('click', () => {
     const st = $('#designStatus'), txt = summaryText();
-    const fallback = () => { const n = $('#b-notes'); n.value = txt; st.textContent = 'Copying is blocked here, so your design was added to the booking notes below.'; };
+    const fallback = () => { $('#b-incdesign').checked = true; st.textContent = 'Copying is blocked here, so your design is attached to the booking form below instead.'; };
     try { navigator.clipboard.writeText(txt).then(() => st.textContent = 'Copied. Paste it into WhatsApp or an email to us.', fallback); } catch (e) { fallback(); }
   });
-  $('#bookDesign').addEventListener('click', () => { $('#b-notes').value = summaryText(); });
+  $('#bookDesign').addEventListener('click', () => { $('#b-incdesign').checked = true; });
 
   /* Tabs */
   function showTab(which) {
@@ -871,10 +912,16 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     size();
   };
   $('#u-metric').addEventListener('click', () => setUnits(false)); $('#u-imp').addEventListener('click', () => setUnits(true));
-  $('#bookSize').addEventListener('click', () => { $('#b-notes').value = lastProfile; });
+  $('#bookSize').addEventListener('click', () => { $('#b-incfit').checked = true; });
+  $('#sizer').addEventListener('change', () => { $('#b-incfit').checked = true; });
   size();
 
   /* ---------------- Booking ---------------- */
+  // Hide the floating WhatsApp button where it would cover the Fitting Room or the booking form
+  const waBtn = $('.wa'), covering = new Set();
+  const waIO = new IntersectionObserver(es => { es.forEach(e => e.isIntersecting ? covering.add(e.target) : covering.delete(e.target)); waBtn.classList.toggle('away', covering.size > 0); }, { rootMargin: '-15% 0px -15% 0px' });
+  ['#fitting', '#visit'].forEach(s => waIO.observe($(s)));
+
   // Where bookings go. Paste your Google Apps Script web app URL between the quotes
   // to save every booking as a row in your Google Sheet (see README.md).
   const BOOKING_SHEET_URL = 'https://script.google.com/macros/s/AKfycbw5E9wOjgC3PqsC5Iy4DwjpStgN01xUe8vTmn5jDchqeWPvH5hxGreqyPZQ8xXpfAcgXw/exec';
@@ -894,7 +941,9 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     if (!name || !contact) { msg.textContent = 'Please add your name and a phone number or email so we can confirm your appointment.'; (name ? f.contact : f.name).focus(); return; }
     if (f.website.value) return; // filled only by spam bots
 
-    const booking = { name, contact, type: f.type.value, date: niceDate(f.date.value), time: f.time.value, notes: f.notes.value.trim(), page: location.href };
+    // Notes carry the customer's own words plus any attached design and fit profile
+    const notes = [f.notes.value.trim(), $('#b-incdesign').checked ? summaryText() : '', $('#b-incfit').checked ? lastProfile.replace('Fit profile (estimate):', 'FIT PROFILE (estimate):') : ''].filter(Boolean).join('\n\n');
+    const booking = { name, contact, type: f.type.value, date: niceDate(f.date.value), time: f.time.value, notes, page: location.href };
     const text = [
       'Hello Hawksman, I would like to book an appointment.', '',
       `Name: ${booking.name}`, `Contact: ${booking.contact}`, `Appointment: ${booking.type}`,
