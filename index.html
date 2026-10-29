@@ -187,23 +187,13 @@ section { position: relative; padding-block: 130px; }
 .designer { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
 .preview { position: sticky; top: 100px; min-width: 0; }
 .pv-photo { aspect-ratio: 4 / 5; max-width: 100%; position: relative; overflow: hidden; background: var(--green-deep); }
-.pv-photo > img, .pv-photo > canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.pv-photo > canvas { transition: opacity .45s var(--ease); }
-.pv-photo > canvas.fade { opacity: 0; }
-.pv-ref { position: absolute; right: 14px; top: 14px; width: 24%; margin: 0; border: 4px solid var(--white); box-shadow: 0 12px 24px rgba(0,0,0,.3); background: var(--white); }
-.pv-ref img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
-.pv-ref figcaption { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; text-align: center; color: var(--ink); padding: 4px 0 2px; }
-.pv-inside { position: absolute; left: 14px; bottom: 14px; width: 34%; aspect-ratio: 4 / 5; border: 5px solid var(--white); box-shadow: 0 18px 36px rgba(0,0,0,.35); display: grid; grid-template-columns: 30% 1fr; background: var(--white); }
-.pv-inside .facing, .pv-inside .lin { background-size: 140px; position: relative; }
-.pv-inside .facing { box-shadow: inset -6px 0 8px -4px rgba(0,0,0,.45); }
-.pv-inside .lin::after { content: ""; position: absolute; inset: 0; background: linear-gradient(120deg, rgba(255,255,255,.22), transparent 40%, rgba(0,0,0,.18)); pointer-events: none; }
-.pv-inside .welt { position: absolute; left: 14%; right: 14%; top: 26%; height: 5px; border-radius: 2px; background: rgba(0,0,0,.45); box-shadow: 0 1px 0 rgba(255,255,255,.35); }
-.pv-inside .tag { position: absolute; left: 50%; top: 9%; transform: translateX(-50%); background: #f3ead2; color: #0e3b2e; font: 600 7px/1 var(--serif); letter-spacing: .22em; padding: 5px 6px 4px; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
-.pv-inside .mono { position: absolute; left: 0; right: 0; bottom: 18%; text-align: center; font-family: var(--script); font-size: clamp(18px, 2.4vw, 30px); line-height: 1; text-shadow: 0 1px 1px rgba(0,0,0,.35); }
-.pv-inside small { position: absolute; left: 30%; right: 0; bottom: 5px; text-align: center; font-size: 8px; letter-spacing: .24em; text-transform: uppercase; color: #f3ead2; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.pv-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .8s var(--ease), transform 1.4s var(--ease); }
+.pv-photo img.out { opacity: 0; transform: scale(1.04); }
 .pv-photo .note { position: absolute; left: 14px; top: 14px; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; background: rgba(10,44,34,.75); padding: 8px 12px; color: var(--on-green); }
-.pv-swatch { position: absolute; right: 18px; bottom: 18px; width: 22%; aspect-ratio: 1; border-radius: 50%; border: 6px solid var(--white); box-shadow: 0 20px 40px rgba(0,0,0,.35); background-size: 220px; transition: background-image .4s; }
+.pv-swatch { position: absolute; right: 18px; bottom: 18px; width: 34%; aspect-ratio: 1; border-radius: 50%; border: 6px solid var(--white); box-shadow: 0 20px 40px rgba(0,0,0,.35); background-size: 220px; transition: background-image .4s; }
 .pv-swatch::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.28), transparent 55%), radial-gradient(circle at 70% 80%, rgba(0,0,0,.3), transparent 60%); }
+.pv-lining { position: absolute; right: calc(34% + 4px); bottom: 26px; width: 15%; aspect-ratio: 1; border-radius: 50%; border: 4px solid var(--white); box-shadow: 0 12px 24px rgba(0,0,0,.3); background-size: cover; display: grid; place-items: center; }
+.pv-lining span { font-family: var(--script); font-size: clamp(14px, 1.6vw, 22px); line-height: 1; }
 .summary { margin-top: 26px; background: var(--paper); color: var(--ink); padding: 26px 28px; position: relative; }
 .summary::before { content: ""; position: absolute; inset: 6px; border: 1px solid var(--line); pointer-events: none; }
 .summary header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 8px; }
@@ -498,15 +488,10 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
         <div class="designer">
           <div class="preview">
             <div class="pv-photo" id="pvPhoto">
-              <img id="pvBase" src="img/check-chair.jpg" alt="Preview of the garment in your chosen cloth">
-              <canvas id="pvCanvas" width="512" height="640" aria-hidden="true"></canvas>
-              <span class="note" id="pvNote">Your cloth</span>
-              <figure class="pv-ref" id="pvRef" hidden><img id="pvRefImg" src="img/tuxedo.jpg" alt=""><figcaption>Style</figcaption></figure>
-              <div class="pv-inside" id="pvInside" title="Inside the jacket: lining and monogram">
-                <div class="facing" id="pvFacing"></div>
-                <div class="lin" id="pvLin"><i class="welt"></i><b class="tag">HAWKSMAN</b><span class="mono" id="pvMono"></span></div>
-                <small>Inside</small>
-              </div>
+              <img id="pvImgA" src="img/check-chair.jpg" alt="">
+              <img id="pvImgB" class="out" src="img/check-chair.jpg" alt="">
+              <span class="note" id="pvNote">Style reference</span>
+              <div class="pv-lining" id="pvLining" title="Lining and monogram"><span id="pvMono"></span></div>
               <div class="pv-swatch" id="pvSwatch" title="Your cloth"></div>
             </div>
             <div class="summary">
@@ -730,8 +715,7 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
       g.fillStyle = 'rgba(110,70,40,.55)'; for (let p = 40; p < 320; p += 80) { g.fillRect(p, 0, 2, 320); g.fillRect(0, p, 320, 2); } }
     if (kind === 'twill') { g.strokeStyle = accent; g.lineWidth = 2; for (let i = -320; i < 640; i += 6) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i + 320, 320); g.stroke(); } }
     if (kind === 'shark') { for (let y = 0; y < 320; y += 4) for (let x = 0; x < 320; x += 4) if ((x / 4 + y / 4) % 2) { g.fillStyle = accent; g.fillRect(x, y, 2, 4); } }
-    if (kind === 'linen') { for (let i = 0; i < 420; i++) { g.fillStyle = Math.random() > .5 ? 'rgba(255,250,235,.22)' : 'rgba(120,104,76,.18)'; g.fillRect(Math.random() * 320, Math.random() * 320, 6 + Math.random() * 34, .8 + Math.random() * .8); }
-      for (let i = 0; i < 160; i++) { g.fillStyle = 'rgba(120,104,76,.14)'; g.fillRect(Math.random() * 320, Math.random() * 320, .8, 6 + Math.random() * 26); } }
+    if (kind === 'linen') { for (let i = 0; i < 260; i++) { g.fillStyle = Math.random() > .5 ? 'rgba(240,230,205,.5)' : 'rgba(140,122,90,.4)'; g.fillRect(Math.random() * 320, Math.random() * 320, 14 + Math.random() * 80, 1 + Math.random() * 1.4); } }
     if (kind === 'hopsack') { g.fillStyle = accent; for (let y = 0; y < 320; y += 6) for (let x = 0; x < 320; x += 6) if ((x / 6 + y / 6) % 2) g.fillRect(x, y, 5, 5); }
     if (kind === 'paisley') { g.fillStyle = accent; for (let y = 0; y < 320; y += 40) for (let x = 0; x < 320; x += 40) { const ox = (y / 40) % 2 ? 20 : 0; g.beginPath(); g.ellipse(x + ox, y, 9, 13, .6, 0, Math.PI * 2); g.fill(); g.beginPath(); g.arc(x + ox + 8, y - 10, 3, 0, Math.PI * 2); g.fill(); } }
     if (kind === 'bengal') { g.fillStyle = accent; for (let x = 0; x < 320; x += 20) g.fillRect(x, 0, 10, 320); }
@@ -843,40 +827,7 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     form.addEventListener('input', e => { if (e.target.name === 'mono') { $('#b-incdesign').checked = true; D.mono = e.target.value.toUpperCase().replace(/[^A-Z]/g, ''); e.target.value = D.mono; render(); } });
   }
   function setGarment(g) { D = Object.assign({}, D, PRESET[g] || {}, { garment: g }); render(); }
-  // Live cloth preview: each base photo has a garment mask (alpha) with its folds and shadows (grey).
-  // The chosen cloth is tiled, multiplied by the shading, clipped to the mask and laid over the photo.
-  const BASES = {
-    suit: { photo: 'img/check-chair.jpg', mask: 'img/fit-suit.png', scale: .34 },
-    jacket: { photo: 'img/jacket-form.jpg', mask: 'img/fit-jacket.png', scale: .42 },
-    trousers: { photo: 'img/check-chair.jpg', mask: 'img/fit-trousers.png', scale: .34 },
-    shirt: { photo: 'img/check-sofa.jpg', mask: 'img/fit-shirt.png', scale: .45 }
-  };
-  const BASE_FOR = { two: 'suit', three: 'jacket', tux: 'jacket', blazer: 'jacket', trousers: 'trousers', shirt: 'shirt' };
-  const imgCache = {};
-  const loadImg = src => imgCache[src] || (imgCache[src] = new Promise((ok, fail) => { const i = new Image(); i.onload = () => ok(i); i.onerror = fail; i.src = src; }));
-  let paintToken = 0, lastPaint = '', lastFabricId = '';
-  async function paintPreview(baseKey, fabricSrc) {
-    const key = baseKey + fabricSrc.length + fabricSrc.slice(-40);
-    if (key === lastPaint) return; lastPaint = key;
-    const token = ++paintToken, base = BASES[baseKey], cv = $('#pvCanvas');
-    cv.classList.add('fade');
-    try {
-      const [photo, mask, fab] = await Promise.all([loadImg(base.photo), loadImg(base.mask), loadImg(fabricSrc)]);
-      if (token !== paintToken) return;
-      // Drawn at 2x so the cloth stays crisp even though the photos are small
-      const W = photo.naturalWidth * 2, H = photo.naturalHeight * 2;
-      const off = document.createElement('canvas'); off.width = W; off.height = H; const o = off.getContext('2d');
-      o.imageSmoothingQuality = 'high';
-      const pat = o.createPattern(fab, 'repeat'); pat.setTransform(new DOMMatrix().scale(base.scale * 2));
-      o.fillStyle = pat; o.fillRect(0, 0, W, H);
-      o.globalCompositeOperation = 'multiply'; o.drawImage(mask, 0, 0, W, H);
-      o.globalCompositeOperation = 'destination-in'; o.drawImage(mask, 0, 0, W, H);
-      cv.width = W; cv.height = H; const g = cv.getContext('2d'); g.imageSmoothingQuality = 'high';
-      g.drawImage(photo, 0, 0, W, H); g.drawImage(off, 0, 0);
-      $('#pvBase').src = base.photo;
-      requestAnimationFrame(() => cv.classList.remove('fade'));
-    } catch (e) { cv.classList.remove('fade'); }
-  }
+  let showA = true, lastImg = '', lastFabricId = '';
   function render() {
     $$('#designer input[type=radio]').forEach(i => i.checked = D[i.name] === i.value);
     const mono = $('#d-mono'), thr = $('#d-thread'); if (mono && document.activeElement !== mono) mono.value = D.mono; if (thr) thr.value = D.thread;
@@ -888,19 +839,18 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
     const isShirt = D.garment === 'shirt', hasLining = JACKET.includes(D.garment);
     $('#monoHint').textContent = isShirt ? 'Stitched on the cuff or the chest. We confirm where at your fitting.' : 'Stitched by hand inside the jacket, on the lining.';
     // preview
+    const img = GARMENTS[D.garment].img;
+    if (img !== lastImg) { const a = $('#pvImgA'), b = $('#pvImgB'); const inEl = showA ? b : a, outEl = showA ? a : b;
+      if (lastImg) { inEl.src = img; inEl.classList.remove('out'); outEl.classList.add('out'); showA = !showA; } else { a.src = img; }
+      lastImg = img; }
+    $('#pvNote').textContent = GARMENTS[D.garment].label + ' · style reference';
     const fabric = isShirt ? findIn(SHIRTINGS, D.shirting) : findIn(CLOTHS, D.cloth);
-    const baseKey = BASE_FOR[D.garment];
-    paintPreview(baseKey, fabric.img);
-    $('#pvNote').textContent = `${GARMENTS[D.garment].label} · ${fabric.name}`;
     $('#pvSwatch').style.backgroundImage = `url(${fabric.img})`;
-    // When the preview photo is a stand-in (dress form), show the real style photo too
-    const ref = $('#pvRef'), showRef = BASES[baseKey].photo !== GARMENTS[D.garment].img;
-    ref.hidden = !showRef; if (showRef) $('#pvRefImg').src = GARMENTS[D.garment].img;
-    $('#pvInside').hidden = !hasLining;
-    $('#pvFacing').style.backgroundImage = `url(${fabric.img})`;
-    $('#pvLin').style.backgroundImage = `url(${findIn(LININGS, D.lining).img})`;
+    const lin = $('#pvLining'); lin.hidden = !(hasLining || isShirt);
+    lin.style.backgroundImage = `url(${hasLining ? findIn(LININGS, D.lining).img : fabric.img})`;
+    lin.title = hasLining ? 'Lining and monogram' : 'Monogram';
     const pm = $('#pvMono'); pm.textContent = D.mono || ''; pm.style.color = { gold: '#d9b86a', ivory: '#f3ead2', green: '#0e3b2e', navy: '#1b2440' }[D.thread];
-    // The preview only moves when the cloth itself changes; style choices leave the photo as it is
+    // The swatch only moves when the cloth itself changes; style choices leave the preview as it is
     if (fabric.id !== lastFabricId) { if (lastFabricId && hasGsap && !reduce) gsap.fromTo('#pvSwatch', { scale: .9, rotate: -8 }, { scale: 1, rotate: 0, duration: .9, ease: 'expo.out' }); lastFabricId = fabric.id; }
     // summary
     $('#sumGarment').textContent = GARMENTS[D.garment].label;
