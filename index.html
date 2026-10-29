@@ -331,6 +331,8 @@ form.booking .full { grid-column: 1 / -1; }
 .choice input:focus-visible + label { outline: 1px solid var(--green); outline-offset: 3px; }
 .form-foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; }
 .form-foot small { color: var(--muted); font-size: 13px; max-width: 34ch; }
+form.booking > .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.form-msg a { color: var(--green); font-weight: 500; }
 .form-msg { grid-column: 1 / -1; border-left: 2px solid var(--green); padding: 14px 18px; background: rgba(14,59,46,.07); font-size: 15px; }
 @media (max-width: 900px) { .visit-grid { grid-template-columns: 1fr; gap: 56px; } form.booking { grid-template-columns: 1fr; } }
 
@@ -611,9 +613,10 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
         <div class="fld"><label for="b-date">Preferred date</label><input id="b-date" name="date" type="date"></div>
         <div class="fld"><label for="b-time">Time</label><select id="b-time" name="time"><option>Morning</option><option selected>Afternoon</option><option>Evening</option></select></div>
         <div class="fld full"><label for="b-notes">Notes</label><textarea id="b-notes" name="notes" placeholder="The occasion, a date to be ready by, or your design from the Fitting Room"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="b-website">Leave this empty</label><input id="b-website" name="website" tabindex="-1" autocomplete="off"></div>
         <div class="form-foot">
-          <small>We reply within one working day to confirm your time.</small>
-          <button class="btn" type="submit">Request appointment</button>
+          <small>Sending opens WhatsApp with your request filled in. Tap send there, and we will confirm your time.</small>
+          <button class="btn" type="submit">Send on WhatsApp</button>
         </div>
         <div id="formMsg" hidden></div>
       </form>
@@ -872,13 +875,46 @@ footer.site { background: var(--green-deep); color: var(--on-green); padding-top
   size();
 
   /* ---------------- Booking ---------------- */
+  // Where bookings go. Paste your Google Apps Script web app URL between the quotes
+  // to save every booking as a row in your Google Sheet (see README.md).
+  const BOOKING_SHEET_URL = '';
+  const WHATSAPP_NUMBER = '918138919157';
+
   const bf = $('#bookingForm'), msg = $('#formMsg');
+  const dateIn = $('#b-date');
+  const today = new Date(); today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+  dateIn.min = today.toISOString().slice(0, 10);
+  const niceDate = v => { if (!v) return 'Flexible'; const d = new Date(v + 'T00:00'); return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); };
+
   bf.addEventListener('submit', e => {
     e.preventDefault();
-    const name = bf.elements.name.value.trim(), contact = bf.elements.contact.value.trim();
+    const f = bf.elements;
+    const name = f.name.value.trim(), contact = f.contact.value.trim();
     msg.className = 'form-msg'; msg.hidden = false;
-    if (!name || !contact) { msg.textContent = 'Please add your name and a phone number or email so we can confirm your appointment.'; (name ? bf.elements.contact : bf.elements.name).focus(); return; }
-    msg.textContent = `Thank you, ${name.split(' ')[0]}. Your ${bf.elements.type.value.toLowerCase()} request is noted. This form is a preview and does not send yet; for now, message us on WhatsApp to confirm.`;
+    if (!name || !contact) { msg.textContent = 'Please add your name and a phone number or email so we can confirm your appointment.'; (name ? f.contact : f.name).focus(); return; }
+    if (f.website.value) return; // filled only by spam bots
+
+    const booking = { name, contact, type: f.type.value, date: niceDate(f.date.value), time: f.time.value, notes: f.notes.value.trim(), page: location.href };
+    const text = [
+      'Hello Hawksman, I would like to book an appointment.', '',
+      `Name: ${booking.name}`, `Contact: ${booking.contact}`, `Appointment: ${booking.type}`,
+      `Preferred date: ${booking.date}`, `Time: ${booking.time}`,
+      booking.notes ? `\nNotes:\n${booking.notes}` : ''
+    ].join('\n').trim();
+    const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+    // Open WhatsApp straight from the click so phones do not block it
+    const win = window.open(waUrl, '_blank');
+
+    // Keep a copy in the Google Sheet, even if the customer never taps send
+    if (BOOKING_SHEET_URL) {
+      fetch(BOOKING_SHEET_URL, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(booking) }).catch(() => {});
+    }
+
+    const first = name.split(' ')[0].replace(/[<>&"]/g, '');
+    msg.innerHTML = win
+      ? `Thank you, ${first}. WhatsApp has opened with your request. Tap send there and we will confirm your time. <a href="${waUrl}" target="_blank" rel="noopener">Open WhatsApp again</a>`
+      : `Thank you, ${first}. <a href="${waUrl}" target="_blank" rel="noopener">Tap here to send your request on WhatsApp</a>, and we will confirm your time.`;
   });
 
   /* ---------------- Atelier sticky photo ---------------- */

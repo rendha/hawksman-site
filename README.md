@@ -22,4 +22,20 @@ Double-click `index.html`, or open it in any browser. An internet connection is 
 
 ## Booking form
 
-The appointment form does not send anything yet. To receive requests, connect it to a form service such as Formspree, or keep customers on the WhatsApp button.
+When a customer presses **Send on WhatsApp**, WhatsApp opens with their booking typed out, addressed to +91 81389 19157. To change the number, edit `WHATSAPP_NUMBER` in `index.html` (country code, no `+` or spaces).
+
+### Save bookings to a Google Sheet
+
+This keeps a row for every booking, even if the customer never taps send in WhatsApp.
+
+1. Create a new Google Sheet (sheets.new), named for example *Hawksman bookings*.
+2. In the sheet, open **Extensions → Apps Script**. Delete what is there and paste in the whole of `google-sheet-script.gs`.
+   - To get an email for each booking, put your address in `NOTIFY_EMAIL`.
+3. Click **Save**, then **Deploy → New deployment**. Click the gear icon, choose **Web app**, and set:
+   - **Execute as:** Me
+   - **Who has access:** Anyone
+4. Click **Deploy**, then **Authorize access** and allow it with your Google account.
+5. Copy the **Web app URL** (it ends in `/exec`).
+6. In `index.html`, paste it between the quotes of `const BOOKING_SHEET_URL = '';`, then push the change to GitHub.
+
+New bookings appear in the *Bookings* tab with a *Status* column you can change to Confirmed or Done.
