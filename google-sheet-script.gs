@@ -7,6 +7,9 @@
 
 // Optional: an email address to notify for every new booking. Leave '' for none.
 const NOTIFY_EMAIL = '';
+// Only needed when the script is not opened from the sheet itself:
+// the long ID in the sheet's address, between /d/ and /edit.
+const SHEET_ID = '';
 const SHEET_NAME = 'Bookings';
 const COLUMNS = ['Received', 'Name', 'Contact', 'Appointment', 'Preferred date', 'Time', 'Notes', 'Status'];
 
@@ -14,7 +17,7 @@ function doPost(e) {
   const p = (e && e.parameter) || {};
   if (p.website) return reply_(false); // spam bots fill this hidden field
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(COLUMNS);
